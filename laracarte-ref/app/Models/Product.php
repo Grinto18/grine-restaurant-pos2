@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    use \App\Traits\BelongsToTenant;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'image',
+        'category_id',
+        'stock',          // BARU
+        'is_available'    // BARU
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class, 'product_ingredients')
+            ->withPivot('quantity');
+    }
+}
