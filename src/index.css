@@ -65,3 +65,13 @@
     visibility: visible;
   }
 }
+
+@media (max-width: 767px) {
+  aside { position: fixed; inset: auto 0 0 0; width: 100% !important; height: 72px !important; z-index: 45; }
+  aside > div:first-child, aside > div:last-child { display: none; }
+  aside nav { display: flex; gap: 6px; padding: 8px; overflow-x: auto; }
+  aside nav button { width: auto !important; min-width: 58px; padding: 8px !important; justify-content: center !important; }
+  aside nav button span:not(:first-child), aside nav button div span + span { display: none; }
+  main { padding-bottom: 72px; }
+  header { height: 56px !important; padding-inline: 10px !important; }
+}

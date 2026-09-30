@@ -19,6 +19,7 @@ import {
 import { StorageService } from '../services/storage';
 import { PrintService } from '../services/printService';
 import { getTranslation } from '../i18n/translations';
+import { CloudSync } from '../services/cloudSync';
 
 export interface ToastMessage {
   id: string;
@@ -58,7 +59,7 @@ interface AppContextType {
   // POS Active Cart
   cart: OrderItem[];
   selectedTable: Table | null;
-  orderType: 'dine_in' | 'takeaway';
+  orderType: 'dine_in' | 'takeaway' | 'delivery';
   discountValue: number;
   discountType: 'percentage' | 'fixed';
   orderNote: string;
@@ -83,7 +84,7 @@ interface AppContextType {
   clearCart: () => void;
   setDiscount: (value: number, type: 'percentage' | 'fixed') => void;
   setSelectedTable: (table: Table | null) => void;
-  setOrderType: (type: 'dine_in' | 'takeaway') => void;
+  setOrderType: (type: 'dine_in' | 'takeaway' | 'delivery') => void;
   setOrderNote: (note: string) => void;
 
   // Business Operations
@@ -143,7 +144,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Active POS Cart
   const [cart, setCart] = useState<OrderItem[]>([]);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [orderType, setOrderType] = useState<'dine_in' | 'takeaway'>('dine_in');
+  const [orderType, setOrderType] = useState<'dine_in' | 'takeaway' | 'delivery'>('dine_in');
   const [discountValue, setDiscountValue] = useState<number>(0);
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('fixed');
   const [orderNote, setOrderNote] = useState<string>('');
@@ -154,6 +155,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [lastCompletedOrder, setLastCompletedOrder] = useState<Order | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void Promise.all([
+        CloudSync.push('orders', orders), CloudSync.push('products', products),
+        CloudSync.push('categories', categories), CloudSync.push('tables', tables),
+        CloudSync.push('inventory', ingredients), CloudSync.push('settings', settings),
+        CloudSync.push('shifts', shifts), CloudSync.push('customers', StorageService.getCustomers()),
+      ]);
+    }, 1200);
+    return () => window.clearTimeout(timer);
+  }, [orders, products, categories, tables, ingredients, settings, shifts]);
 
   // Translations
   const t = getTranslation(language);
@@ -422,7 +435,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const orderNum = editingOrderId
       ? orders.find((o) => o.id === editingOrderId)?.orderNumber || String(Math.floor(1000 + Math.random() * 9000))
-      : String(Math.floor(1000 + Math.random() * 9000));
+      : `GR-${String(orders.length + 1).padStart(6, '0')}`;
 
     const newOrder: Order = {
       id: editingOrderId || `order-${Date.now()}`,
@@ -506,7 +519,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const change = method === 'cash' ? Math.max(0, received - cartTotal) : 0;
     const orderNum = editingOrderId
       ? orders.find((o) => o.id === editingOrderId)?.orderNumber || String(Math.floor(1000 + Math.random() * 9000))
-      : String(Math.floor(1000 + Math.random() * 9000));
+      : `GR-${String(orders.length + 1).padStart(6, '0')}`;
 
     const completedOrder: Order = {
       id: editingOrderId || `order-${Date.now()}`,

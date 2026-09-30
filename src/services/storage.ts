@@ -9,6 +9,7 @@ import {
   Expense,
   AuditLog,
   User,
+  Customer,
 } from '../types/pos';
 import {
   INITIAL_CATEGORIES,
@@ -31,9 +32,18 @@ const STORAGE_KEYS = {
   EXPENSES: 'grine_pos_expenses_v2',
   AUDIT_LOGS: 'grine_pos_audit_logs_v2',
   ACTIVE_USER: 'grine_pos_active_user_v2',
+  CUSTOMERS: 'grine_pos_customers_v1',
 };
 
 export class StorageService {
+  public static getCustomers(): Customer[] {
+    const data = localStorage.getItem(STORAGE_KEYS.CUSTOMERS);
+    return data ? JSON.parse(data) : [];
+  }
+
+  public static saveCustomers(customers: Customer[]) {
+    localStorage.setItem(STORAGE_KEYS.CUSTOMERS, JSON.stringify(customers));
+  }
   // --- Settings ---
   public static getSettings(): RestaurantSettings {
     const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);

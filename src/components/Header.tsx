@@ -22,6 +22,7 @@ export const Header: React.FC = () => {
   } = useApp();
 
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [online, setOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     const updateTime = () => {
@@ -39,13 +40,15 @@ export const Header: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => { const sync=()=>setOnline(navigator.onLine); window.addEventListener('online',sync); window.addEventListener('offline',sync); return ()=>{window.removeEventListener('online',sync);window.removeEventListener('offline',sync)}; }, []);
+
   return (
     <header className="h-16 bg-[#160e08] border-b border-[#362111] px-5 flex items-center justify-between select-none z-20 shrink-0 font-['Cairo',sans-serif]">
       {/* System status & Clock */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#22150b] border border-[#3e2614] text-xs">
-          <Wifi className="w-3.5 h-3.5 text-emerald-400" />
-          <span className="font-bold text-emerald-400">وضع العمل المباشر (Online)</span>
+          <Wifi className={`w-3.5 h-3.5 ${online?'text-emerald-400':'text-amber-400'}`} />
+          <span className={`font-bold ${online?'text-emerald-400':'text-amber-400'}`}>{online ? 'ONLINE' : 'OFFLINE — sauvegarde locale'}</span>
         </div>
 
         <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#22150b] border border-[#3e2614] text-xs font-mono">

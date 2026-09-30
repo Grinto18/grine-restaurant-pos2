@@ -16,6 +16,8 @@ import {
   Laptop,
   ShoppingBag,
   Sparkles,
+  Gauge,
+  ContactRound,
 } from 'lucide-react';
 import { Role } from '../types/pos';
 
@@ -67,6 +69,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenLoginModal, onOpenWindow
 
   const navItems: NavItem[] = [
     {
+      id: 'dashboard', label: 'لوحة القيادة', labelFr: 'Tableau de bord',
+      icon: <Gauge className="w-5 h-5" />, roles: ['admin','manager'],
+    },
+    {
       id: 'pos',
       label: 'نقطة البيع (POS)',
       labelFr: 'Vente POS',
@@ -90,6 +96,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenLoginModal, onOpenWindow
       roles: ['admin', 'manager', 'cashier'],
       badge: orders.length,
       badgeColor: 'bg-amber-600',
+    },
+    {
+      id: 'customers', label: 'الزبائن', labelFr: 'Clients',
+      icon: <ContactRound className="w-5 h-5" />, roles: ['admin','manager','cashier'],
     },
     {
       id: 'kds',

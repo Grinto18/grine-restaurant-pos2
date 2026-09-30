@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { PrintService } from '../../services/printService';
-import { X, Printer, ChefHat, Check, CheckCircle2 } from 'lucide-react';
+import { X, Printer, ChefHat, CheckCircle2, FileText } from 'lucide-react';
 
 export const ReceiptModal: React.FC = () => {
   const {
@@ -28,6 +28,8 @@ export const ReceiptModal: React.FC = () => {
   const handlePrintKitchen = () => {
     PrintService.printKitchenTicket(order, settings);
   };
+
+  const handlePrintA4 = () => PrintService.printA4Invoice(order, settings);
 
   const paymentLabel =
     order.paymentMethod === 'cib'
@@ -167,6 +169,7 @@ export const ReceiptModal: React.FC = () => {
 
         {/* Print Buttons */}
         <div className="p-4 border-t border-[#362111] bg-[#1a1109] flex flex-col sm:flex-row gap-2.5">
+          <button onClick={handlePrintA4} className="flex-1 py-3 px-4 rounded-2xl bg-[#26180c] border border-[#422915] text-stone-200 hover:bg-[#322012] font-bold text-xs flex items-center justify-center gap-2 transition"><FileText className="w-4 h-4"/><span>Facture A4</span></button>
           <button
             onClick={handlePrintKitchen}
             className="flex-1 py-3 px-4 rounded-2xl bg-[#26180c] border border-[#422915] text-amber-300 hover:bg-[#322012] font-bold text-xs flex items-center justify-center gap-2 transition"

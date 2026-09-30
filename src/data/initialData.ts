@@ -30,6 +30,7 @@ export const PIZZA_ADDONS: ProductAddon[] = [
 ];
 
 export const INITIAL_CATEGORIES: Category[] = [
+  { id: 'cat-grillades', name: 'Grillades', nameAr: 'المشويات', nameEn: 'Grills', icon: '♨', color: '#b45309', sortOrder: 0 },
   { id: 'cat-main', name: 'Plats Principaux', nameAr: 'الأطباق الرئيسية', nameEn: 'Main Dishes', icon: '🍲', color: '#eab308', sortOrder: 1 },
   { id: 'cat-pizza', name: 'Pizza', nameAr: 'البيتزا', nameEn: 'Pizza', icon: '🍕', color: '#ef4444', sortOrder: 2 },
   { id: 'cat-tacos', name: 'Tacos', nameAr: 'طاكوس', nameEn: 'Tacos', icon: '🌯', color: '#d97706', sortOrder: 3 },
@@ -41,6 +42,19 @@ export const INITIAL_CATEGORIES: Category[] = [
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
+  ...[
+    ['Demi Poulet Grillé','نصف دجاج مشوي',900],['Poulet Entier Grillé','دجاج مشوي كامل',1700],
+    ['Cuisse de Poulet','فخذ دجاج',700],['Blanc de Poulet','صدر دجاج',900],['Steak Haché','لحم مفروم مشوي',900],
+    ['Entrecôte','أنتركوت',2200],['Filet de Bœuf','فيليه بقري',2500],['Côte de Bœuf','ضلع بقري',2800],
+    ["Côtelette d'Agneau",'ريش غنم',2400],["Gigot d'Agneau",'فخذ غنم',2500],['Merguez','مرقاز',900],
+    ['Brochettes de Poulet','أسياخ دجاج',1000],['Brochettes de Viande','أسياخ لحم',1300],['Brochettes Mixtes','أسياخ مشكلة',1600],
+    ["Méchoui d'Agneau",'خروف مشوي',2800],['Grillade Mixte — 1 personne','مشاوي مشكلة — شخص',2200],
+    ['Grillade Mixte — 2 personnes','مشاوي مشكلة — شخصان',4200],['Grillade Mixte — Familiale','مشاوي مشكلة — عائلية',6500],
+  ].map(([name,nameAr,price], index): Product => ({
+    id:`prod-grill-${index+1}`, name:String(name), nameAr:String(nameAr), categoryId:'cat-grillades', price:Number(price),
+    image:'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=500&q=80',
+    stock:30, minStock:5, sku:`GRL-${String(index+1).padStart(3,'0')}`, isAvailable:true,
+  })),
   // ================= 1. الأطباق الرئيسية =================
   {
     id: 'prod-main-1',

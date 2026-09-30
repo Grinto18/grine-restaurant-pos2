@@ -106,7 +106,9 @@ export interface Order {
   orderNumber: string;
   tableId?: string;
   tableName?: string;
-  type: 'dine_in' | 'takeaway';
+  type: 'dine_in' | 'takeaway' | 'delivery';
+  customerId?: string;
+  customerName?: string;
   status: OrderStatus;
   items: OrderItem[];
   subtotal: number;
@@ -125,6 +127,15 @@ export interface Order {
   readyAt?: string;
   cashierName?: string;
   note?: string;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  notes?: string;
+  createdAt: string;
 }
 
 export interface Expense {

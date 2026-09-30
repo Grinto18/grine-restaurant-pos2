@@ -18,6 +18,8 @@ import { TableSelectModal } from './components/tables/TableSelectModal';
 import { LoginModal } from './components/auth/LoginModal';
 import { WindowsInstallerModal } from './components/desktop/WindowsInstallerModal';
 import { ToastContainer } from './components/common/ToastContainer';
+import { DashboardView } from './components/dashboard/DashboardView';
+import { CustomersView } from './components/customers/CustomersView';
 
 const MainLayout: React.FC = () => {
   const {
@@ -48,12 +50,16 @@ const MainLayout: React.FC = () => {
 
   const renderActiveView = () => {
     switch (activeTab) {
+      case 'dashboard':
+        return <DashboardView />;
       case 'pos':
         return <PosTerminal onOpenTableModal={() => setIsTableModalOpen(true)} />;
       case 'tables':
         return <TablesView />;
       case 'orders':
         return <OrdersView />;
+      case 'customers':
+        return <CustomersView />;
       case 'kds':
         return <KitchenDisplay />;
       case 'products':

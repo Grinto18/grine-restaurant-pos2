@@ -10,6 +10,7 @@ import {
   Calendar,
   Printer,
   Award,
+  Download,
 } from 'lucide-react';
 
 export const ReportsView: React.FC = () => {
@@ -91,6 +92,11 @@ export const ReportsView: React.FC = () => {
   const handlePrintZReport = () => {
     window.print();
   };
+  const exportCsv = () => {
+    const rows = [['Commande','Date','Caissier','Paiement','Total DA'], ...filteredOrders.map(o => [o.orderNumber,new Date(o.createdAt).toLocaleString('fr-DZ'),o.cashierName||'',o.paymentMethod||'',String(o.total)])];
+    const csv = rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(';')).join('\n');
+    const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'})); const a=document.createElement('a');a.href=url;a.download=`grine-rapport-${dateRange}.csv`;a.click();URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="flex-1 flex flex-col h-full bg-[#070b14] overflow-hidden p-6 select-none">
@@ -139,6 +145,7 @@ export const ReportsView: React.FC = () => {
             <Printer className="w-3.5 h-3.5" />
             <span>Imprimer Rapport</span>
           </button>
+          <button onClick={exportCsv} className="py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 transition"><Download className="w-3.5 h-3.5"/><span>Export CSV</span></button>
         </div>
       </div>
 
