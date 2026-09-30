@@ -1,6 +1,17 @@
 import { Order, RestaurantSettings } from '../types/pos';
 
 export class PrintService {
+  public static printA4Invoice(order: Order, settings: RestaurantSettings) {
+    const printWindow = window.open('', '_blank', 'width=900,height=900');
+    if (!printWindow) return;
+    const html = this.getReceiptHtml(order, settings)
+      .replace('size: 80mm auto;', 'size: A4;')
+      .replace('width: 76mm;', 'width: 190mm;')
+      .replace('font-size: 13px;', 'font-size: 15px;')
+      .replace('</body>', `<div style="margin-top:60px;border-top:1px solid #999;padding-top:12px;display:flex;justify-content:space-between"><span>Signature client</span><span>Cachet GRINE RESTAURANT</span></div></body>`);
+    printWindow.document.write(html); printWindow.document.close();
+    printWindow.onload = () => { printWindow.focus(); printWindow.print(); };
+  }
   /**
    * Generates formatted HTML for 80mm thermal paper and triggers instant print
    */

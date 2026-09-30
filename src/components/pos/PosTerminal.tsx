@@ -379,6 +379,10 @@ export const PosTerminal: React.FC<PosTerminalProps> = ({ onOpenTableModal }) =>
             >
               🛍 سفري (Emporter)
             </button>
+            <button
+              onClick={() => { setOrderType('delivery'); setSelectedTable(null); }}
+              className={`flex-1 min-h-11 px-3 py-2 rounded-xl text-xs font-black transition ${orderType === 'delivery' ? 'bg-amber-600 text-white' : 'bg-[#24170d] text-stone-300 border border-[#3e2715]'}`}
+            >Livraison</button>
           </div>
 
           {/* Table Selector with Status Badge */}
